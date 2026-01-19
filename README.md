@@ -2,6 +2,8 @@
 
 Bun + Biome in a single executable. A drop-in replacement for [Bun](https://bun.sh) with embedded [Biome](https://biomejs.dev/) for linting and formatting.
 
+On my macOS machine, the standard `bun` executable is about 60Mb. `Bunb` is 80Mb since it includes the biome executable.
+
 ## Install
 
 Download the latest release for your platform:
