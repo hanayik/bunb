@@ -34,7 +34,12 @@ jobs:
         run: bun install
 
       - name: Build for ${{ matrix.target }}
-        run: bun run build:${{ matrix.target }}
+        run: |
+          set -e
+          bun run build:${{ matrix.target }}
+          echo "Build completed, listing outputs:"
+          ls -la binaries/ || echo "No binaries directory"
+          ls -la dist/${{ matrix.target }}/ || echo "No dist directory"
 
       - name: Test
         run: bun test
