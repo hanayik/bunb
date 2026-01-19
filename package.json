@@ -1,5 +1,6 @@
 {
   "name": "bunb",
+  "version": "1.0.0",
   "module": "src/cli.ts",
   "type": "module",
   "private": true,
