@@ -9,7 +9,40 @@ permissions:
   contents: write
 
 jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - target: darwin-arm64
+            os: macos-14
+          - target: darwin-x64
+            os: macos-13
+          - target: linux-x64
+            os: ubuntu-latest
+          - target: linux-arm64
+            os: ubuntu-24.04-arm
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build for ${{ matrix.target }}
+        run: bun run build:${{ matrix.target }}
+
+      - name: Test
+        run: bun test
+
   build:
+    needs: test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -33,9 +66,6 @@ jobs:
 
       - name: Build for ${{ matrix.target }}
         run: bun run build:${{ matrix.target }}
-
-      - name: Test
-        run: bun test
 
       - name: Create tarball
         run: |
