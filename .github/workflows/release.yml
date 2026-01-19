@@ -15,8 +15,6 @@ jobs:
         include:
           - target: darwin-arm64
             os: macos-14
-          - target: darwin-x64
-            os: macos-13
           - target: linux-x64
             os: ubuntu-latest
           - target: linux-arm64
@@ -48,7 +46,6 @@ jobs:
       matrix:
         target:
           - darwin-arm64
-          - darwin-x64
           - linux-x64
           - linux-arm64
 
