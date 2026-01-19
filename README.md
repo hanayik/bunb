@@ -10,9 +10,6 @@ Download the latest release for your platform:
 # macOS Apple Silicon
 curl -fsSL https://github.com/hanayik/bunb/releases/latest/download/bunb-darwin-arm64.tar.gz | tar -xz
 
-# macOS Intel
-curl -fsSL https://github.com/hanayik/bunb/releases/latest/download/bunb-darwin-x64.tar.gz | tar -xz
-
 # Linux x64
 curl -fsSL https://github.com/hanayik/bunb/releases/latest/download/bunb-linux-x64.tar.gz | tar -xz
 
@@ -23,7 +20,8 @@ curl -fsSL https://github.com/hanayik/bunb/releases/latest/download/bunb-linux-a
 Move to a directory in your PATH:
 
 ```bash
-sudo mv bunb /usr/local/bin/
+# make sure ~/.local bin is on your path
+mv bunb ~/.local/bin
 ```
 
 ### Alias as `bun`
@@ -31,7 +29,7 @@ sudo mv bunb /usr/local/bin/
 To use bunb as your default `bun` command, add an alias to your shell config:
 
 ```bash
-# ~/.bashrc or ~/.zshrc
+# ~/.bashrc or ~/.zshrc or ~/.aliases (my personal setup)
 alias bun="bunb"
 ```
 
@@ -58,9 +56,9 @@ bun lint src/    # Uses Biome
 
 Bunb includes a default Biome config with opinionated defaults:
 
-- **Single quotes** for strings
-- **No semicolons** (ASI)
-- **No trailing commas**
+- Single quote for strings
+- No semicolons
+- No trailing commas
 - 2-space indentation
 
 To override, create a `biome.json` or `biome.jsonc` in your project root.
@@ -87,7 +85,6 @@ bunb build ./app.ts
 bun install
 bun run build                    # Build for current platform
 bun run build:darwin-arm64       # macOS Apple Silicon
-bun run build:darwin-x64         # macOS Intel
 bun run build:linux-x64          # Linux x64
 bun run build:linux-arm64        # Linux ARM64
 ```
