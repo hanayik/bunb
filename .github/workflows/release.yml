@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - darwin-arm64
+          - darwin-x64
+          - linux-x64
+          - linux-arm64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build for ${{ matrix.target }}
+        run: bun run build:${{ matrix.target }}
+
+      - name: Test
+        run: bun test
+
+      - name: Create tarball
+        run: |
+          cd dist/${{ matrix.target }}
+          tar -czvf bunb-${{ matrix.target }}.tar.gz bunb
+          mv bunb-${{ matrix.target }}.tar.gz ../
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bunb-${{ matrix.target }}
+          path: dist/bunb-${{ matrix.target }}.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*/bunb-*.tar.gz
+          generate_release_notes: true
