@@ -3,7 +3,19 @@ import { spawn } from "bun";
 import { join } from "node:path";
 import { existsSync } from "node:fs";
 
-const BUNB_PATH = join(import.meta.dir, "..", "dist", "darwin-arm64", "bunb");
+function getPlatformDir(): string {
+	const os = process.platform;
+	const arch = process.arch;
+
+	if (os === "darwin" && arch === "arm64") return "darwin-arm64";
+	if (os === "darwin" && arch === "x64") return "darwin-x64";
+	if (os === "linux" && arch === "x64") return "linux-x64";
+	if (os === "linux" && arch === "arm64") return "linux-arm64";
+
+	throw new Error(`Unsupported platform: ${os}-${arch}`);
+}
+
+const BUNB_PATH = join(import.meta.dir, "..", "dist", getPlatformDir(), "bunb");
 const FIXTURES_PATH = join(import.meta.dir, "fixtures");
 
 async function runBunb(args: string[]): Promise<{
